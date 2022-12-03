@@ -1,28 +1,25 @@
-// import { dirname } from "node:path";
-// import path from "path";
-// import { fileURLToPath } from "url";
-// const readable = getReadableStreamSomehow();
+import { createReadStream } from "node:fs";
+import { dirname } from "node:path";
+import path from "path";
+import { fileURLToPath } from "url";
 
-// const read = async () => {
-//   const __filename = fileURLToPath(import.meta.url);
-//   const __dirname = dirname(__filename);
-//   const dirPath = path.join(__dirname, "./files");
-//   const copyPath = path.join(__dirname, "/files_copy");
+const read = async () => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const readFile = path.join(__dirname, "/files", "fileToRead.txt");
 
-//   // 'readable' may be triggered multiple times as data is buffered in
-//   readable.on("readable", () => {
-//     let chunk;
-//     console.log("Stream is readable (new data received in buffer)");
-//     // Use a loop to make sure we read all currently available data
-//     while (null !== (chunk = readable.read())) {
-//       console.log(`Read ${chunk.length} bytes of data...`);
-//     }
-//   });
+  const readebleStream = createReadStream(readFile, "utf-8");
 
-//   // 'end' will be triggered once when there is no more data available
-//   readable.on("end", () => {
-//     console.log("Reached end of stream.");
-//   });
-// };
+  try {
+    let data = "";
 
-// await read();
+    readebleStream.on("data", (chunk) => (data += chunk));
+    readebleStream.on("end", () => process.stdout.write(data));
+  } catch (err) {
+    throw new Error(err);
+  }
+
+  console.log(process.stdout);
+};
+
+await read();
