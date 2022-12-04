@@ -1,22 +1,21 @@
-import { appendFile, stat } from 'fs/promises';
-import { dirname } from 'node:path';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { appendFile, stat } from "fs/promises";
+import { dirname } from "node:path";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const create = async () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const filePath = path.join(__dirname, './files', '/fresh.txt')
-  
+  const filePath = path.join(__dirname, "./files", "/fresh.txt");
+
   try {
     await stat(filePath);
-    console.log(new Error('FS operation failed'))
+    console.log(new Error("FS operation failed"));
   } catch {
     try {
-      await appendFile(filePath, 'I am fresh and young')
-      console.log('я создался');
+      await appendFile(filePath, "I am fresh and young");
     } catch {
-      throw new Error('File is not create');
+      throw new Error("File is not create");
     }
   }
 };
